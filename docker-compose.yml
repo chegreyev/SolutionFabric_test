@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  app:
+    tty: true
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    hostname: app
+    env_file:
+      - env/app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/code
+    depends_on:
+      - db
+  db:
+    image: postgres:10.4
+    hostname: db
+    env_file:
+      - env/db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql-clinic/data/
+
+volumes:
+  postgres_data:
